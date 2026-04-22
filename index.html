@@ -3,6 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Metadatos para SEO y Redes Sociales (WhatsApp, Facebook, Twitter) -->
+    <meta name="description" content="Navega, estudia y trabaja sin interrupciones con INTERSERVICE Telecomunicaciones. Proveedor local de Internet de Fibra Óptica, cámaras de seguridad y energía solar.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="INTERSERVICE Telecomunicaciones | Fibra Óptica">
+    <meta property="og:description" content="Internet de alta velocidad, cámaras de vigilancia, equipos de cómputo y soluciones de energía solar en tu región. ¡Conéctate con nosotros!">
+    <meta property="og:image" content="img/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="INTERSERVICE Telecomunicaciones">
+    <meta name="twitter:description" content="Internet de alta velocidad, cámaras de vigilancia, equipos de cómputo y soluciones de energía solar.">
+    <meta name="twitter:image" content="img/logo.png">
+
     <title>INTERSERVICE Telecomunicaciones | Fibra Óptica e Internet Inalámbrico</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -44,11 +56,12 @@
     <!-- Header / Navbar -->
     <header class="bg-white text-gray-800 sticky top-0 z-50 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex flex-col justify-center leading-none">
-                    <span class="font-heading font-extrabold text-2xl tracking-tight text-primary">INTERSERVICE</span>
-                    <span class="font-heading font-bold text-sm text-secondary">Telecomunicaciones</span>
-                </div>
+            <div class="flex justify-between items-center h-20 md:h-24">
+                <!-- Contenedor del logo con overflow-hidden para cortar el fondo blanco sobrante -->
+                <a href="#" class="relative flex items-center justify-center h-16 md:h-20 w-40 md:w-56 overflow-hidden shrink-0">
+                    <!-- Mix-blend-multiply ayuda a que lo blanco se vuelva transparente, scale "hace zoom" y el overflow del padre corta lo que sobra -->
+                    <img src="img/logo.png" alt="INTERSERVICE Telecomunicaciones" class="w-full h-full object-contain transform scale-[1.8] mix-blend-multiply">
+                </a>
                 <nav class="hidden md:flex space-x-8">
                     <a href="#nosotros" class="font-semibold hover:text-secondary transition">Nosotros</a>
                     <a href="#beneficios" class="font-semibold hover:text-secondary transition">Beneficios</a>
@@ -497,9 +510,8 @@
             <div class="grid md:grid-cols-4 gap-12 mb-12">
                 <!-- Marca -->
                 <div class="col-span-1 md:col-span-1">
-                    <div class="flex flex-col items-start leading-none mb-6 p-3 bg-white rounded-lg inline-block">
-                        <span class="font-heading font-extrabold text-xl tracking-tight text-primary">INTERSERVICE</span>
-                        <span class="font-heading font-bold text-sm text-secondary">Telecomunicaciones</span>
+                    <div class="mb-6 bg-white p-3 rounded-xl inline-block w-fit">
+                        <img src="img/logo.png" alt="INTERSERVICE Telecomunicaciones" class="max-h-16 w-auto">
                     </div>
                     <p class="text-sm text-gray-400 mb-6">Conectando a Tekom, Yucatán con el mundo a través de soluciones de internet confiables de fibra óptica e inalámbricas.</p>
                 </div>
