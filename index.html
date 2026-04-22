@@ -27,11 +27,16 @@
     </script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Iconos Phosphor -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; }
         h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
+        /* Ajuste para que el menú fijo no tape el contenido al hacer scroll automático */
+        section[id], div[id] { scroll-margin-top: 6rem; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -45,7 +50,9 @@
                     <span class="font-heading font-bold text-sm text-secondary">Telecomunicaciones</span>
                 </div>
                 <nav class="hidden md:flex space-x-8">
+                    <a href="#nosotros" class="font-semibold hover:text-secondary transition">Nosotros</a>
                     <a href="#beneficios" class="font-semibold hover:text-secondary transition">Beneficios</a>
+                    <a href="#servicios" class="font-semibold hover:text-secondary transition">Servicios</a>
                     <a href="#planes" class="font-semibold hover:text-secondary transition">Planes</a>
                     <a href="#cobertura" class="font-semibold hover:text-secondary transition">Cobertura</a>
                     <a href="#legal" class="font-semibold hover:text-secondary transition">Transparencia</a>
@@ -63,7 +70,7 @@
     <section class="relative bg-primary overflow-hidden">
         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20 hover:opacity-30 transition duration-1000"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20 pb-24 md:pt-32 md:pb-40 text-center lg:text-left lg:flex lg:items-center">
-            <div class="lg:w-1/2">
+            <div class="lg:w-1/2" data-aos="fade-right">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4">
                     Internet Fibra Óptica <span class="text-secondary">Simétrico</span>
                 </h1>
@@ -88,16 +95,96 @@
         </div>
     </section>
 
+    <!-- Acerca de Nosotros -->
+    <section id="nosotros" class="py-20 bg-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-12 items-center mb-20">
+                <div class="lg:w-1/2" data-aos="fade-right">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-primary rounded-full text-sm font-bold mb-4">
+                        <i class="ph-bold ph-buildings"></i> Acerca de Nosotros
+                    </div>
+                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-6">Comprometidos con tu <span class="text-primary">Conectividad</span></h2>
+                    <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                        <strong>INTERSERVICE TELECOMUNICACIONES</strong> es una empresa dedicada al ramo de las telecomunicaciones, instala infraestructura, equipos óptimos y busca soluciones para brindar un servicio eficiente de internet al usuario final.
+                    </p>
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm inline-flex mb-4">
+                        <div class="bg-green-100 text-green-600 p-3 rounded-full text-2xl">
+                            <i class="ph-bold ph-users-three"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-xl text-gray-800 tracking-tight">+100 Clientes</p>
+                            <p class="text-sm text-gray-500 font-medium">Activos y Satisfechos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 flex flex-col gap-6" data-aos="fade-left">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-primary hover:-translate-y-1 transition duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="bg-blue-50 text-primary p-3 rounded-xl text-2xl"><i class="ph-bold ph-target"></i></div>
+                            <h3 class="text-2xl font-bold text-gray-800">Nuestra Misión</h3>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">Brindar servicios profesionales de telecomunicaciones de una excelente calidad, solucionar los problemas técnicos de nuestros clientes en el menor tiempo posible, así como garantizarles una navegación fluida a través de la red, usando la mejor tecnología disponible y la preparación continua de nuestros recursos humanos, en beneficio de la comunidad, cliente y empresa.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-secondary hover:-translate-y-1 transition duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="bg-orange-50 text-secondary p-3 rounded-xl text-2xl"><i class="ph-bold ph-eye"></i></div>
+                            <h3 class="text-2xl font-bold text-gray-800">Nuestra Visión</h3>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">INTERSERVICE TELECOMUNICACIONES tiene como visión consolidarse como la empresa líder en el mercado del servicio de internet en la zona de Valladolid, manteniendo una calidad de excelencia contando con equipos de alta tecnología que sean intrínsecamente seguros, ofreciendo servicio eficiente al cliente.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Valores -->
+            <div data-aos="fade-up" data-aos-delay="200">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-4">Nuestros Valores Fundamentales</h3>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Pilares clave que rigen nuestro comportamiento y el desarrollo de nuestras operaciones diarias para brindarte la mejor experiencia.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-2xl text-center border border-gray-100 hover:shadow-xl transition group duration-300">
+                        <div class="w-16 h-16 bg-blue-50 group-hover:bg-primary group-hover:text-white transition rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-primary">
+                            <i class="ph-fill ph-hand-heart"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-3 text-gray-800">Integridad</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">Ser una empresa integra y hacer siempre lo correcto, sin afectar a terceros en el desarrollo de nuestras actividades diarias.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl text-center border border-gray-100 hover:shadow-xl transition group duration-300">
+                        <div class="w-16 h-16 bg-orange-50 group-hover:bg-secondary group-hover:text-white transition rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-secondary">
+                            <i class="ph-fill ph-check-square-offset"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-3 text-gray-800">Responsabilidad</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">Compromiso tanto con los proveedores como con los clientes, a fin de brindar servicio en los tiempos y según los cronogramas establecidos.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl text-center border border-gray-100 hover:shadow-xl transition group duration-300">
+                        <div class="w-16 h-16 bg-blue-50 group-hover:bg-primary group-hover:text-white transition rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-primary">
+                            <i class="ph-fill ph-scales"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-3 text-gray-800">Honestidad</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">Realizar actividades y compromisos de la empresa con transparencia y rectitud, siendo reales en cada decisión.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl text-center border border-gray-100 hover:shadow-xl transition group duration-300">
+                        <div class="w-16 h-16 bg-orange-50 group-hover:bg-secondary group-hover:text-white transition rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-secondary">
+                            <i class="ph-fill ph-users"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-3 text-gray-800">Respeto</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">Respetar a todos independientemente de su raza, religión y/o estrato social. Promoviendo siempre el buen clima laboral y atención al cliente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Sección de Beneficios -->
     <section id="beneficios" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16" data-aos="fade-up">
                 <h2 class="text-3xl font-bold text-primary mb-4">¿Por qué elegir INTERSERVICE?</h2>
                 <p class="text-gray-600 max-w-2xl mx-auto">Nos enfocamos en brindar un servicio local de calidad, a diferencia de las grandes corporaciones, entendemos las necesidades de nuestra región.</p>
             </div>
             <div class="grid md:grid-cols-3 gap-10">
                 <!-- Beneficio 1 -->
-                <div class="bg-light p-8 rounded-2xl text-center border-t-4 border-secondary hover:shadow-xl transition">
+                <div class="bg-light p-8 rounded-2xl text-center border-t-4 border-secondary hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="100">
                     <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md text-secondary text-3xl">
                         <i class="ph ph-rocket-launch"></i>
                     </div>
@@ -105,7 +192,7 @@
                     <p class="text-gray-600">Disfruta de velocidades estables para streaming en HD, videojuegos o videollamadas sin pausas.</p>
                 </div>
                 <!-- Beneficio 2 -->
-                <div class="bg-light p-8 rounded-2xl text-center border-t-4 border-secondary hover:shadow-xl transition">
+                <div class="bg-light p-8 rounded-2xl text-center border-t-4 border-secondary hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="200">
                     <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md text-secondary text-3xl">
                         <i class="ph ph-shield-check"></i>
                     </div>
@@ -113,7 +200,7 @@
                     <p class="text-gray-600">Redundancia en nuestra infraestructura central para garantizar el servicio activo la mayor parte del tiempo.</p>
                 </div>
                 <!-- Beneficio 3 -->
-                <div class="bg-light p-8 rounded-2xl text-center border-t-4 border-secondary hover:shadow-xl transition">
+                <div class="bg-light p-8 rounded-2xl text-center border-t-4 border-secondary hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="300">
                     <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md text-secondary text-3xl">
                         <i class="ph ph-headset"></i>
                     </div>
@@ -124,10 +211,82 @@
         </div>
     </section>
 
+    <!-- Sección de Servicios Integrales -->
+    <section id="servicios" class="py-20 bg-gray-50 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-bold text-primary mb-4">Soluciones Tecnológicas Integrales</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Además de nuestro veloz internet de fibra óptica, ofrecemos tecnología para modernizar, proteger y dar energía a tu hogar o negocio.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Servicio: Videovigilancia -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition group flex flex-col" data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-56 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?q=80&w=800&auto=format&fit=crop" alt="Cámaras de Vigilancia" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-in-out">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/30 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6 flex items-center gap-3">
+                            <div class="bg-secondary p-2 rounded-full text-white shadow-md">
+                                <i class="ph-bold ph-video-camera text-xl"></i>
+                            </div>
+                            <h3 class="text-white font-bold text-xl font-heading shadow-sm">Videovigilancia</h3>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col justify-between">
+                        <p class="text-gray-600 mb-6 text-sm flex-grow">Te ofrecemos el servicio de instalación de cámaras de seguridad (CCTV) profesionales para proteger lo que más te importa. Monitorea en tiempo real, desde cualquier lugar con tu celular.</p>
+                        <a href="https://wa.me/529851132688" target="_blank" class="inline-flex items-center text-primary font-bold hover:text-secondary transition text-sm uppercase tracking-wide">
+                            ¡Contrata Ahora! <i class="ph-bold ph-arrow-right ml-2 transition-transform group-hover:translate-x-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Servicio: Cómputo -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition group flex flex-col" data-aos="fade-up" data-aos-delay="200">
+                    <div class="h-56 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1587831990711-23ca6441447b?q=80&w=800&auto=format&fit=crop" alt="Equipos de Cómputo y Accesorios" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-in-out">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/30 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6 flex items-center gap-3">
+                            <div class="bg-secondary p-2 rounded-full text-white shadow-md">
+                                <i class="ph-bold ph-desktop text-xl"></i>
+                            </div>
+                            <h3 class="text-white font-bold text-xl font-heading shadow-sm text-balance">Equipos y Accesorios</h3>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col justify-between">
+                        <p class="text-gray-600 mb-6 text-sm flex-grow">Ofrecemos una amplia variedad de equipos de cómputo y accesorios de alta calidad, desde uso personal hasta ventas al por mayor para satisfacer integralmente las necesidades de nuestros clientes.</p>
+                        <a href="https://wa.me/529851132688" target="_blank" class="inline-flex items-center text-primary font-bold hover:text-secondary transition text-sm uppercase tracking-wide">
+                            Más información <i class="ph-bold ph-arrow-right ml-2 transition-transform group-hover:translate-x-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Servicio: Energía Solar -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition group flex flex-col" data-aos="fade-up" data-aos-delay="300">
+                    <div class="h-56 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=800&auto=format&fit=crop" alt="Sistema de Energía Solar" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-in-out">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/30 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6 flex items-center gap-3">
+                            <div class="bg-secondary p-2 rounded-full text-white shadow-md">
+                                <i class="ph-bold ph-sun text-xl"></i>
+                            </div>
+                            <h3 class="text-white font-bold text-xl font-heading shadow-sm">Energía Solar</h3>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col justify-between">
+                        <p class="text-gray-600 mb-6 text-sm flex-grow">Obtén energía sin interrupciones combinando la tecnología de generación con paneles solares y otros medios de respaldo. Olvídate de los apagones y haz crecer tu tranquilidad.</p>
+                        <a href="https://wa.me/529851132688" target="_blank" class="inline-flex items-center text-primary font-bold hover:text-secondary transition text-sm uppercase tracking-wide">
+                            Más información <i class="ph-bold ph-arrow-right ml-2 transition-transform group-hover:translate-x-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Planes de Internet -->
     <section id="planes" class="py-20 bg-light">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16" data-aos="fade-up">
                 <h2 class="text-3xl font-bold text-primary mb-4">Planes diseñados para ti</h2>
                 <p class="text-gray-600 max-w-2xl mx-auto">Selecciona el paquete que mejor se adapte a tu consumo. Precios transparentes y sin letras pequeñas.</p>
                 <!-- Badge IFT Cumplimiento -->
@@ -138,7 +297,7 @@
             
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Plan 20 -->
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="100">
                     <div class="p-6 text-center bg-purple-700 text-white border-b">
                         <h3 class="text-xl font-bold mb-1 uppercase tracking-wide">Básico</h3>
                         <div class="text-4xl font-extrabold mb-1">
@@ -159,7 +318,7 @@
                 </div>
 
                 <!-- Plan 30 -->
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="200">
                     <div class="p-6 text-center bg-teal-600 text-white border-b">
                         <h3 class="text-xl font-bold mb-1 uppercase tracking-wide">Familiar</h3>
                         <div class="text-4xl font-extrabold mb-1">
@@ -179,7 +338,7 @@
                 </div>
 
                 <!-- Plan 40 -->
-                <div class="bg-white rounded-2xl shadow-2xl border-2 border-secondary overflow-hidden flex flex-col relative transform lg:-translate-y-2 select-none">
+                <div class="bg-white rounded-2xl shadow-2xl border-2 border-secondary overflow-hidden flex flex-col relative transform lg:-translate-y-2 select-none" data-aos="zoom-in" data-aos-delay="300">
                     <div class="absolute top-0 inset-x-0 bg-secondary text-white text-center text-xs font-bold py-1 uppercase tracking-wider">Más Popular</div>
                     <div class="p-6 pt-8 text-center bg-orange-500 text-white border-b">
                         <h3 class="text-xl font-bold mb-1 uppercase tracking-wide">Avanzado</h3>
@@ -200,7 +359,7 @@
                 </div>
 
                 <!-- Plan 60 -->
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="400">
                     <div class="p-6 text-center bg-purple-900 text-white border-b">
                         <h3 class="text-xl font-bold mb-1 uppercase tracking-wide">Ultra</h3>
                         <div class="text-4xl font-extrabold mb-1">
@@ -222,7 +381,7 @@
             </div>
 
             <!-- Disclaimers y Cobertura Local -->
-            <div class="mt-12 max-w-4xl mx-auto space-y-6">
+            <div id="cobertura" class="mt-12 max-w-4xl mx-auto space-y-6" data-aos="fade-up" data-aos-delay="200">
                 <!-- Promociones -->
                 <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-sm">
                     <h4 class="font-bold text-primary mb-3 flex items-center gap-2 text-lg">
@@ -259,13 +418,13 @@
     <!-- Proceso de Instalación -->
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-primary mb-16">Conectarte es muy fácil</h2>
+            <h2 class="text-3xl font-bold text-center text-primary mb-16" data-aos="fade-up">Conectarte es muy fácil</h2>
             <div class="flex flex-col md:flex-row justify-center items-start gap-8 relative">
                 <!-- Línea conectora genérica para desktop -->
                 <div class="hidden md:block absolute top-[50px] left-[15%] right-[15%] h-1 bg-gray-200 z-0"></div>
 
                 <!-- Paso 1 -->
-                <div class="flex-1 text-center relative z-10">
+                <div class="flex-1 text-center relative z-10" data-aos="fade-up" data-aos-delay="100">
                     <div class="bg-primary text-white w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg border-4 border-white">
                         1
                     </div>
@@ -273,7 +432,7 @@
                     <p class="text-gray-600 text-sm">Envíanos un WhatsApp o llámanos para compartir tu ubicación.</p>
                 </div>
                 <!-- Paso 2 -->
-                <div class="flex-1 text-center relative z-10">
+                <div class="flex-1 text-center relative z-10" data-aos="fade-up" data-aos-delay="200">
                     <div class="bg-primary text-white w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg border-4 border-white">
                         2
                     </div>
@@ -281,7 +440,7 @@
                     <p class="text-gray-600 text-sm">Validamos la cobertura en tu domicilio (WISP o Fibra) y asignamos tu equipo.</p>
                 </div>
                 <!-- Paso 3 -->
-                <div class="flex-1 text-center relative z-10">
+                <div class="flex-1 text-center relative z-10" data-aos="fade-up" data-aos-delay="300">
                     <div class="bg-primary text-white w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg border-4 border-white">
                         3
                     </div>
@@ -289,7 +448,7 @@
                     <p class="text-gray-600 text-sm">Programamos la visita de nuestro técnico, firmamos contrato e instalamos tu módem.</p>
                 </div>
                 <!-- Paso 4 -->
-                <div class="flex-1 text-center relative z-10">
+                <div class="flex-1 text-center relative z-10" data-aos="fade-up" data-aos-delay="400">
                     <div class="bg-secondary text-white w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg border-4 border-white">
                         <i class="ph-bold ph-wifi-high"></i>
                     </div>
@@ -303,7 +462,7 @@
     <!-- Transparencia Legal / Cumplimiento IFT & PROFECO -->
     <section id="legal" class="py-16 bg-blue-50 border-t border-b border-blue-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center gap-6 mb-8">
+            <div class="flex flex-col md:flex-row items-center gap-6 mb-8" data-aos="fade-right">
                 <i class="ph-fill ph-scales text-5xl text-primary"></i>
                 <div>
                     <h2 class="text-2xl font-bold text-primary">Transparencia y Derechos del Consumidor</h2>
@@ -312,7 +471,7 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-8 text-sm text-gray-700">
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm" data-aos="fade-up" data-aos-delay="100">
                     <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><i class="ph-bold ph-file-text"></i> Contratos y Políticas</h4>
                     <ul class="space-y-3">
                         <li><strong>Contrato de Adhesión:</strong> Nuestro contrato está debidamente registrado ante la PROFECO. <a href="#" class="text-secondary hover:underline">Consultar Contrato (Folio: [XXXX-XXXX])</a>.</li>
@@ -320,7 +479,7 @@
                         <li><strong>Aviso de Privacidad:</strong> Tus datos están protegidos. <a href="#" class="text-secondary hover:underline">Lee nuestro aviso de privacidad aquí</a>.</li>
                     </ul>
                 </div>
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm" data-aos="fade-up" data-aos-delay="200">
                     <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><i class="ph-bold ph-currency-circle-dollar"></i> Tarifas y Calidad de Servicio</h4>
                     <ul class="space-y-3">
                         <li><strong>Precios Transparentes:</strong> Todas las tarifas listadas incluyen IVa (Impuesto al Valor Agregado). No hay cargos ocultos.</li>
@@ -349,8 +508,10 @@
                 <div>
                     <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Enlaces Rápidos</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#planes" class="hover:text-secondary transition">Planes de Internet</a></li>
+                        <li><a href="#nosotros" class="hover:text-secondary transition">Acerca de Nosotros</a></li>
                         <li><a href="#beneficios" class="hover:text-secondary transition">Por qué elegirnos</a></li>
+                        <li><a href="#servicios" class="hover:text-secondary transition">Otros Servicios (CCTV, Solar, PC)</a></li>
+                        <li><a href="#planes" class="hover:text-secondary transition">Planes de Internet</a></li>
                         <li><a href="#cobertura" class="hover:text-secondary transition">Zonas de Cobertura</a></li>
                         <li><a href="#" class="hover:text-secondary transition">Bolsa de Trabajo</a></li>
                     </ul>
@@ -401,5 +562,15 @@
         </div>
     </footer>
 
+    <!-- AOS Animation JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+    </script>
 </body>
 </html>
