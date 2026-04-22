@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo INTERSERVICE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #00478F;    /* Color principal */
+            --brand-orange: #F5A623;  /* Color secundario */
+            --text-gray: #4A4A4A;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+
+        /* Contenedor principal del logo */
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 40px 60px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+        }
+
+        /* Gráfico de la antena */
+        .logo-icon {
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        /* Título principal: INTERSERVICE */
+        .logo-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        .title-inter {
+            color: var(--brand-blue);
+        }
+
+        .title-service {
+            color: var(--brand-orange);
+        }
+
+        /* Subtítulo: Telecomunicaciones */
+        .logo-subtitle {
+            color: var(--brand-blue);
+            font-size: 16px;
+            font-weight: 400;
+            margin: 8px 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Pie del logo: Fibra óptica... */
+        .logo-footer {
+            color: var(--brand-blue);
+            font-size: 10px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-container">
+        
+        <!-- ICONO DE ANTENA MEJORADO (SVG) -->
+        <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Señales wifi (Ondas) -->
+            <path d="M30 35 Q50 15 70 35" fill="none" stroke="var(--brand-orange)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M40 45 Q50 35 60 45" fill="none" stroke="var(--brand-orange)" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="50" cy="52" r="3" fill="var(--brand-orange)" />
+            
+            <!-- Torre Principal -->
+            <polygon points="45,95 55,95 52,55 48,55" fill="var(--brand-blue)" />
+            <!-- Estructura de cruces -->
+            <line x1="45" y1="90" x2="55" y2="80" stroke="white" stroke-width="1.5" />
+            <line x1="45" y1="80" x2="55" y2="90" stroke="white" stroke-width="1.5" />
+            
+            <line x1="46" y1="75" x2="54" y2="65" stroke="white" stroke-width="1.5" />
+            <line x1="46" y1="65" x2="54" y2="75" stroke="white" stroke-width="1.5" />
+
+            <!-- Torres laterales pequeñas -->
+            <polygon points="25,95 30,95 28,70 27,70" fill="var(--brand-blue)" opacity="0.85" />
+            <polygon points="70,95 75,95 73,70 72,70" fill="var(--brand-blue)" opacity="0.85" />
+            
+            <!-- Base sólida -->
+            <rect x="20" y="95" width="60" height="5" fill="var(--brand-blue)" />
+        </svg>
+
+        <!-- TEXTO -->
+        <h1 class="logo-title">
+            <span class="title-inter">INTER</span><span class="title-service">SERVICE</span>
+        </h1>
+        <p class="logo-subtitle">Telecomunicaciones</p>
+        <p class="logo-footer">FIBRA ÓPTICA • TEKOM, YUCATÁN</p>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTERSERVICE Telecomunicaciones | Fibra Óptica e Internet Inalámbrico</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#357ABD', /* Azul del nuevo logo */
+                        secondary: '#EAA610', /* Amarillo/naranja del logo */
+                        accent: '#F5A623',
+                        dark: '#111827',
+                        light: '#F3F4F6'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Iconos Phosphor -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white text-gray-800 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex flex-col justify-center leading-none">
+                    <span class="font-heading font-extrabold text-2xl tracking-tight text-primary">INTERSERVICE</span>
+                    <span class="font-heading font-bold text-sm text-secondary">Telecomunicaciones</span>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#beneficios" class="font-semibold hover:text-secondary transition">Beneficios</a>
+                    <a href="#planes" class="font-semibold hover:text-secondary transition">Planes</a>
+                    <a href="#cobertura" class="font-semibold hover:text-secondary transition">Cobertura</a>
+                    <a href="#legal" class="font-semibold hover:text-secondary transition">Transparencia</a>
+                </nav>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="https://wa.me/529851132688" target="_blank" class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full font-semibold transition">
+                        <i class="ph-fill ph-whatsapp-logo"></i> Contratar Ya
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-primary overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20 hover:opacity-30 transition duration-1000"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20 pb-24 md:pt-32 md:pb-40 text-center lg:text-left lg:flex lg:items-center">
+            <div class="lg:w-1/2">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4">
+                    Internet Fibra Óptica <span class="text-secondary">Simétrico</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-200 mb-6 max-w-2xl mx-auto lg:mx-0">
+                    Navega, estudia y trabaja sin interrupciones en Chichimila, Tixhualactun, Xocen y toda la región.
+                </p>
+                <div class="inline-block bg-white/20 backdrop-blur border border-white/30 rounded-lg px-4 py-2 text-white font-bold mb-8 shadow-sm">
+                    <i class="ph-fill ph-users mr-2 text-secondary"></i> ¡Más de 700 clientes activos confían en nosotros!
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#planes" class="bg-secondary hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:-translate-y-1">
+                        Ver Planes
+                    </a>
+                    <a href="#cobertura" class="bg-transparent border-2 border-white hover:bg-white hover:text-primary text-white font-bold py-3 px-8 rounded-full transition">
+                        Consultar Cobertura
+                    </a>
+                </div>
+            </div>
+            <div class="lg:w-1/2 mt-12 lg:mt-0 hidden lg:block text-right">
+                <!-- Espacio para ilustración del módem o señal -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Beneficios -->
+    <section id="beneficios" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-primary mb-4">¿Por qué elegir INTERSERVICE?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Nos enfocamos en brindar un servicio local de calidad, a diferencia de las grandes corporaciones, entendemos las necesidades de nuestra región.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-10">
+                <!-- Beneficio 1 -->
+                <div class="bg-light p-8 rounded-2xl text-center border-t-4 border-secondary hover:shadow-xl transition">
+                    <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md text-secondary text-3xl">
+                        <i class="ph ph-rocket-launch"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">Alta Velocidad</h3>
+                    <p class="text-gray-600">Disfruta de velocidades estables para streaming en HD, videojuegos o videollamadas sin pausas.</p>
+                </div>
+                <!-- Beneficio 2 -->
+                <div class="bg-light p-8 rounded-2xl text-center border-t-4 border-secondary hover:shadow-xl transition">
+                    <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md text-secondary text-3xl">
+                        <i class="ph ph-shield-check"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">Conexión Estable</h3>
+                    <p class="text-gray-600">Redundancia en nuestra infraestructura central para garantizar el servicio activo la mayor parte del tiempo.</p>
+                </div>
+                <!-- Beneficio 3 -->
+                <div class="bg-light p-8 rounded-2xl text-center border-t-4 border-secondary hover:shadow-xl transition">
+                    <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md text-secondary text-3xl">
+                        <i class="ph ph-headset"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">Soporte Técnico Local</h3>
+                    <p class="text-gray-600">Atención personalizada y rápida. Si algo falla, nuestros técnicos de la zona te asisten de manera inmediata.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Planes de Internet -->
+    <section id="planes" class="py-20 bg-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-primary mb-4">Planes diseñados para ti</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Selecciona el paquete que mejor se adapte a tu consumo. Precios transparentes y sin letras pequeñas.</p>
+                <!-- Badge IFT Cumplimiento -->
+                <span class="inline-block mt-4 bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-semibold">
+                    <i class="ph ph-info mr-1"></i> Precios en MXN con IVA incluido
+                </span>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Plan 20 -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
+                    <div class="p-6 text-center bg-purple-700 text-white border-b">
+                        <h3 class="text-xl font-bold mb-1 uppercase tracking-wide">Básico</h3>
+                        <div class="text-4xl font-extrabold mb-1">
+                            20 <span class="text-lg font-normal">Mbps</span>
+                        </div>
+                        <div class="text-2xl font-bold bg-white text-purple-800 py-1 mt-2 rounded-lg shadow-inner">$300 <span class="text-sm font-normal">/mes</span></div>
+                    </div>
+                    <div class="p-6 flex-grow">
+                        <ul class="space-y-3 text-gray-600 text-sm">
+                            <li class="flex items-center"><i class="ph-bold ph-check text-primary mr-2"></i> Internet Simétrico</li>
+                            <li class="flex items-center"><i class="ph-bold ph-check text-primary mr-2"></i> Fibra Óptica FTTH</li>
+                            <li class="flex items-center"><i class="ph-bold ph-check text-primary mr-2"></i> Módem incluido</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <a href="https://wa.me/529851132688" target="_blank" class="block w-full text-center border-2 border-purple-700 text-purple-700 hover:bg-purple-700 hover:text-white font-bold py-2 rounded-lg transition">Contratar</a>
+                    </div>
+                </div>
+
+                <!-- Plan 30 -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
+                    <div class="p-6 text-center bg-teal-600 text-white border-b">
+                        <h3 class="text-xl font-bold mb-1 uppercase tracking-wide">Familiar</h3>
+                        <div class="text-4xl font-extrabold mb-1">
+                            30 <span class="text-lg font-normal">Mbps</span>
+                        </div>
+                        <div class="text-2xl font-bold bg-white text-teal-700 py-1 mt-2 rounded-lg shadow-inner">$450 <span class="text-sm font-normal">/mes</span></div>
+                    </div>
+                    <div class="p-6 flex-grow">
+                        <ul class="space-y-3 text-gray-600 text-sm">
+                            <li class="flex items-center"><i class="ph-bold ph-check text-primary mr-2"></i> Internet Simétrico</li>
+                            <li class="flex items-center font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded"><i class="ph-bold ph-television mr-2"></i> Incluye Canales y Series</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <a href="https://wa.me/529851132688" target="_blank" class="block w-full text-center border-2 border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white font-bold py-2 rounded-lg transition">Contratar</a>
+                    </div>
+                </div>
+
+                <!-- Plan 40 -->
+                <div class="bg-white rounded-2xl shadow-2xl border-2 border-secondary overflow-hidden flex flex-col relative transform lg:-translate-y-2 select-none">
+                    <div class="absolute top-0 inset-x-0 bg-secondary text-white text-center text-xs font-bold py-1 uppercase tracking-wider">Más Popular</div>
+                    <div class="p-6 pt-8 text-center bg-orange-500 text-white border-b">
+                        <h3 class="text-xl font-bold mb-1 uppercase tracking-wide">Avanzado</h3>
+                        <div class="text-4xl font-extrabold mb-1">
+                            40 <span class="text-lg font-normal">Mbps</span>
+                        </div>
+                        <div class="text-2xl font-bold bg-white text-orange-600 py-1 mt-2 rounded-lg shadow-inner">$550 <span class="text-sm font-normal">/mes</span></div>
+                    </div>
+                    <div class="p-6 flex-grow">
+                        <ul class="space-y-3 text-gray-600 text-sm">
+                            <li class="flex items-center"><i class="ph-bold ph-check text-primary mr-2"></i> Internet Simétrico</li>
+                            <li class="flex items-center font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded"><i class="ph-bold ph-television mr-2"></i> Incluye Canales y Series</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <a href="https://wa.me/529851132688" target="_blank" class="block w-full text-center bg-secondary hover:bg-yellow-600 text-white font-bold py-3 rounded-lg transition shadow-md">Contratar Ahora</a>
+                    </div>
+                </div>
+
+                <!-- Plan 60 -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
+                    <div class="p-6 text-center bg-purple-900 text-white border-b">
+                        <h3 class="text-xl font-bold mb-1 uppercase tracking-wide">Ultra</h3>
+                        <div class="text-4xl font-extrabold mb-1">
+                            60 <span class="text-lg font-normal">Mbps</span>
+                        </div>
+                        <div class="text-2xl font-bold bg-white text-purple-900 py-1 mt-2 rounded-lg shadow-inner">$700 <span class="text-sm font-normal">/mes</span></div>
+                    </div>
+                    <div class="p-6 flex-grow">
+                        <ul class="space-y-3 text-gray-600 text-sm">
+                            <li class="flex items-center"><i class="ph-bold ph-check text-primary mr-2"></i> Internet Simétrico</li>
+                            <li class="flex items-center"><i class="ph-bold ph-check text-primary mr-2"></i> Ideal para Gaming / 4K</li>
+                            <li class="flex items-center font-bold text-purple-800 bg-purple-50 px-2 py-1 rounded"><i class="ph-bold ph-television mr-2"></i> Incluye Canales y Series</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <a href="https://wa.me/529851132688" target="_blank" class="block w-full text-center border-2 border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white font-bold py-2 rounded-lg transition">Contratar</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disclaimers y Cobertura Local -->
+            <div class="mt-12 max-w-4xl mx-auto space-y-6">
+                <!-- Promociones -->
+                <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-sm">
+                    <h4 class="font-bold text-primary mb-3 flex items-center gap-2 text-lg">
+                        <i class="ph-fill ph-warning-circle text-secondary text-2xl"></i> Precios y Promociones por Zona
+                    </h4>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-secondary mt-1">📍</span> 
+                            <span><strong>Chichimila:</strong> ¡Promoción especial! Llévate <strong>50 Mbps de bajada y subida por sólo $300/mes.</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-secondary mt-1">📍</span> 
+                            <span><strong>Dzitnup:</strong> Plan básico de fibra óptica de <strong>20 Mbps por $310/mes.</strong></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Cobertura -->
+                <div class="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
+                    <h4 class="font-bold text-primary mb-3 flex items-center gap-2 text-lg">
+                        <i class="ph-fill ph-map-pin text-primary text-2xl"></i> Zonas de Cobertura Fibra Óptica
+                    </h4>
+                    <p class="font-medium text-gray-600 leading-relaxed">
+                        Nuestra red de fibra óptica simétrica ya está disponible en: 
+                        <strong class="text-primary block mt-2 text-lg">Chichimila, Dzitnup, Xocen, Tixhualactun, Nohsuytun, San Pedro Chichimila, Xuilub, Chanchen, Yaxche, Dzitox y Xcail.</strong>
+                    </p>
+                </div>
+
+                <p class="text-xs text-gray-500 text-center uppercase tracking-wide">* Las velocidades anunciadas corresponden a la velocidad máxima (Hasta X Mbps). Los canales y series están sujetos a disponibilidad de aplicación aliada.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proceso de Instalación -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-primary mb-16">Conectarte es muy fácil</h2>
+            <div class="flex flex-col md:flex-row justify-center items-start gap-8 relative">
+                <!-- Línea conectora genérica para desktop -->
+                <div class="hidden md:block absolute top-[50px] left-[15%] right-[15%] h-1 bg-gray-200 z-0"></div>
+
+                <!-- Paso 1 -->
+                <div class="flex-1 text-center relative z-10">
+                    <div class="bg-primary text-white w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg border-4 border-white">
+                        1
+                    </div>
+                    <h4 class="font-bold text-lg text-primary mb-2">Contáctanos</h4>
+                    <p class="text-gray-600 text-sm">Envíanos un WhatsApp o llámanos para compartir tu ubicación.</p>
+                </div>
+                <!-- Paso 2 -->
+                <div class="flex-1 text-center relative z-10">
+                    <div class="bg-primary text-white w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg border-4 border-white">
+                        2
+                    </div>
+                    <h4 class="font-bold text-lg text-primary mb-2">Factibilidad</h4>
+                    <p class="text-gray-600 text-sm">Validamos la cobertura en tu domicilio (WISP o Fibra) y asignamos tu equipo.</p>
+                </div>
+                <!-- Paso 3 -->
+                <div class="flex-1 text-center relative z-10">
+                    <div class="bg-primary text-white w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg border-4 border-white">
+                        3
+                    </div>
+                    <h4 class="font-bold text-lg text-primary mb-2">Instalación</h4>
+                    <p class="text-gray-600 text-sm">Programamos la visita de nuestro técnico, firmamos contrato e instalamos tu módem.</p>
+                </div>
+                <!-- Paso 4 -->
+                <div class="flex-1 text-center relative z-10">
+                    <div class="bg-secondary text-white w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg border-4 border-white">
+                        <i class="ph-bold ph-wifi-high"></i>
+                    </div>
+                    <h4 class="font-bold text-lg text-secondary mb-2">¡Navega!</h4>
+                    <p class="text-gray-600 text-sm">Empieza a disfrutar del mejor y más rápido internet de tu zona.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transparencia Legal / Cumplimiento IFT & PROFECO -->
+    <section id="legal" class="py-16 bg-blue-50 border-t border-b border-blue-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center gap-6 mb-8">
+                <i class="ph-fill ph-scales text-5xl text-primary"></i>
+                <div>
+                    <h2 class="text-2xl font-bold text-primary">Transparencia y Derechos del Consumidor</h2>
+                    <p class="text-gray-600 mt-1">Nuestros servicios operan en estricto cumplimiento con los lineamientos regulatorios del <strong>Instituto Federal de Telecomunicaciones (IFT)</strong> y la <strong>Procuraduría Federal del Consumidor (PROFECO)</strong>.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 text-sm text-gray-700">
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><i class="ph-bold ph-file-text"></i> Contratos y Políticas</h4>
+                    <ul class="space-y-3">
+                        <li><strong>Contrato de Adhesión:</strong> Nuestro contrato está debidamente registrado ante la PROFECO. <a href="#" class="text-secondary hover:underline">Consultar Contrato (Folio: [XXXX-XXXX])</a>.</li>
+                        <li><strong>Condiciones Comerciales:</strong> No manejamos plazos forzosos engañosos. Puedes cancelar el servicio en cualquier momento dando previo aviso, sujeto a las cláusulas de recuperación de equipo del contrato de adhesión.</li>
+                        <li><strong>Aviso de Privacidad:</strong> Tus datos están protegidos. <a href="#" class="text-secondary hover:underline">Lee nuestro aviso de privacidad aquí</a>.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><i class="ph-bold ph-currency-circle-dollar"></i> Tarifas y Calidad de Servicio</h4>
+                    <ul class="space-y-3">
+                        <li><strong>Precios Transparentes:</strong> Todas las tarifas listadas incluyen IVa (Impuesto al Valor Agregado). No hay cargos ocultos.</li>
+                        <li><strong>Velocidad del Servicio:</strong> Las velocidades comercializadas en los planes se expresan como velocidad máxima "Hasta", la cual dependerá de las condiciones de red y atenuación de la tecnología (estándares IFT).</li>
+                        <li><strong>Derechos de los Usuarios:</strong> Conoce tus derechos como usuario de telecomunicaciones en la página oficial del IFT: <a href="http://www.ift.org.mx/usuarios-y-audiencias/conoce-tus-derechos" target="_blank" class="text-secondary hover:underline">Carta de Derechos Mínimos</a>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contacto -->
+    <footer class="bg-dark text-gray-300 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <!-- Marca -->
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex flex-col items-start leading-none mb-6 p-3 bg-white rounded-lg inline-block">
+                        <span class="font-heading font-extrabold text-xl tracking-tight text-primary">INTERSERVICE</span>
+                        <span class="font-heading font-bold text-sm text-secondary">Telecomunicaciones</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-6">Conectando a Tekom, Yucatán con el mundo a través de soluciones de internet confiables de fibra óptica e inalámbricas.</p>
+                </div>
+                
+                <!-- Enlaces -->
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Enlaces Rápidos</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#planes" class="hover:text-secondary transition">Planes de Internet</a></li>
+                        <li><a href="#beneficios" class="hover:text-secondary transition">Por qué elegirnos</a></li>
+                        <li><a href="#cobertura" class="hover:text-secondary transition">Zonas de Cobertura</a></li>
+                        <li><a href="#" class="hover:text-secondary transition">Bolsa de Trabajo</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Legal e Información</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-secondary transition">Aviso de Privacidad</a></li>
+                        <li><a href="#" class="hover:text-secondary transition">Términos y Condiciones</a></li>
+                        <li><a href="#" class="hover:text-secondary transition">Contrato de Adhesión (PROFECO)</a></li>
+                        <li><a href="#" class="hover:text-secondary transition">Mapa de Prácticas Comerciales (IFT)</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contacto -->
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Atención a Clientes</h4>
+                    <ul class="space-y-4 text-sm text-gray-400">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-bold ph-map-pin text-secondary mt-1"></i>
+                            <span>[Dirección Física de la Oficina]<br>Tekom, Yucatán, C.P. 97790</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-bold ph-phone text-secondary"></i>
+                            <span>985 113 2688 | 985 115 1506</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-bold ph-whatsapp-logo text-secondary"></i>
+                            <span>985 113 2688 (Soporte y Ventas)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="ph-bold ph-clock text-secondary mt-1"></i>
+                            <span>Lunes a Sábado: 8:00 AM - 6:00 PM<br>Domingos: Cerrado</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-gray-500">&copy; 2026 INTERSERVICE Telecomunicaciones. Todos los derechos reservados.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition text-2xl"><i class="ph-fill ph-facebook-logo"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition text-2xl"><i class="ph-fill ph-instagram-logo"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
