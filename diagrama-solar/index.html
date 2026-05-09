@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cotizador y Diagrama Solar CFE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background-color: #f8fafc; color: #1e293b; }
+    
+    .tab-btn {
+      padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; cursor: pointer;
+      border: 1px solid #e2e8f0; background: white; color: #64748b; transition: all 0.2s;
+    }
+    .tab-btn.active {
+      border-color: #cbd5e1; background: #f1f5f9; color: #0f172a; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    
+    .panel-content { display: none; }
+    .panel-content.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+    .input-group label { display: block; font-size: 0.75rem; font-weight: 600; color: #64748b; margin-bottom: 0.25rem; text-transform: uppercase; }
+    .input-group input, .input-group select {
+      width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; font-size: 0.875rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .input-group input:focus, .input-group select:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1); }
+    
+    .section-title { font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-bottom: 1rem; margin-top: 2rem; }
+
+    /* Estilos del Canvas (Tab 4) */
+    .mono { font-family: monospace; }
+  </style>
+</head>
+<body class="min-h-screen p-6">
+  <div class="max-w-5xl mx-auto">
+    
+    <!-- TABS NAVIGATION -->
+    <div class="flex flex-wrap gap-2 mb-8" id="tabs-container">
+      <button class="tab-btn active" onclick="switchTab(1)">1 · Datos del recibo</button>
+      <button class="tab-btn" onclick="switchTab(2)" id="tab-2" disabled>2 · Análisis</button>
+      <button class="tab-btn" onclick="switchTab(3)" id="tab-3" disabled>3 · Lista de materiales</button>
+      <button class="tab-btn" onclick="switchTab(4)" id="tab-4" disabled>4 · Diagrama</button>
+    </div>
+
+    <!-- TAB 1: DATOS DEL RECIBO -->
+    <div id="panel-1" class="panel-content active bg-white p-8 rounded-xl shadow-sm border border-slate-200">
+      
+      <div class="section-title mt-0">Datos del titular</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="input-group">
+          <label>Nombre del titular</label>
+          <input type="text" id="inpNombre" placeholder="Ej. Juan Pérez" />
+        </div>
+        <div class="input-group">
+          <label>No. de servicio CFE</label>
+          <input type="text" id="inpServicio" placeholder="12 dígitos" />
+        </div>
+        <div class="input-group">
+          <label>Dirección</label>
+          <input type="text" id="inpDireccion" placeholder="Calle, Número, Colonia" />
+        </div>
+        <div class="input-group">
+          <label>Tarifa CFE</label>
+          <select id="inpTarifa">
+            <option value="1">1 — Doméstica</option>
+            <option value="1A">1A — Zona cálida</option>
+            <option value="1B" selected>1B — Zona muy cálida</option>
+            <option value="1C">1C — Extrema</option>
+            <option value="DAC">DAC — Alto consumo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section-title">Consumo bimestral (kWh) — Últimos periodos</div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="input-group"><label>Periodo 1 (más reciente)</label><input type="number" id="p1" class="consumo-val" /></div>
+        <div class="input-group"><label>Periodo 2</label><input type="number" id="p2" class="consumo-val" /></div>
+        <div class="input-group"><label>Periodo 3</label><input type="number" id="p3" class="consumo-val" /></div>
+        <div class="input-group"><label>Periodo 4</label><input type="number" id="p4" class="consumo-val" /></div>
+        <div class="input-group"><label>Periodo 5</label><input type="number" id="p5" class="consumo-val" /></div>
+        <div class="input-group"><label>Periodo 6</label><input type="number" id="p6" class="consumo-val" /></div>
+      </div>
+
+      <div class="section-title">Datos del recibo actual</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="input-group"><label>Importe energía (sin IVA, $MXN)</label><input type="number" id="impEnergia" step="0.01" /></div>
+        <div class="input-group"><label>DAP (alumbrado público)</label><input type="number" id="impDap" step="0.01" /></div>
+        <div class="input-group"><label>Horas sol pico (HSP) en tu zona</label><input type="number" id="inpHSP" value="5.5" step="0.1" /></div>
+      </div>
+
+      <div class="section-title">Precios de materiales ($MXN con IVA)</div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="input-group"><label>Potencia Panel (W)</label><input type="number" id="inpWatts" value="620" /></div>
+        <div class="input-group"><label>Precio Panel</label><input type="number" id="inpPrecioPanel" value="1562.88" step="0.01" /></div>
+        <div class="input-group"><label>Inversor</label><input type="number" id="inpPrecioInversor" value="6125.26" step="0.01" /></div>
+        <div class="input-group"><label>Montaje (1x4)</label><input type="number" id="inpPrecioMontaje" value="2481.36" step="0.01" /></div>
+        <div class="input-group"><label>Riel Aluminio (c/u)</label><input type="number" id="inpPrecioRiel" value="280.00" step="0.01" /></div>
+        <div class="input-group"><label>Conector MC4 (c/u)</label><input type="number" id="inpPrecioMC4" value="17.40" step="0.01" /></div>
+        <div class="input-group"><label>Protección DC</label><input type="number" id="inpPrecioProtDC" value="220.79" step="0.01" /></div>
+        <div class="input-group"><label>Gabinete</label><input type="number" id="inpPrecioGabinete" value="307.01" step="0.01" /></div>
+        <div class="input-group"><label>Envío</label><input type="number" id="inpPrecioEnvio" value="1.75" step="0.01" /></div>
+      </div>
+
+      <div class="mt-8 flex justify-center">
+        <button onclick="calcularSistema()" class="bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-8 rounded-lg shadow transition flex items-center gap-2">
+          Calcular sistema <span class="text-xl">↗</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: ANÁLISIS -->
+    <div id="panel-2" class="panel-content">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-gray-100 p-6 rounded-xl">
+          <p class="text-sm text-gray-500 mb-1">Consumo promedio bimestral</p>
+          <div class="text-2xl font-bold"><span id="lblPromedio">0</span> kWh</div>
+          <p class="text-xs text-gray-500 mt-1">Últimos 6 periodos</p>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-xl">
+          <p class="text-sm text-gray-500 mb-1">Consumo máximo bimestral</p>
+          <div class="text-2xl font-bold"><span id="lblMaximo">0</span> kWh</div>
+          <p class="text-xs text-gray-500 mt-1">Para dimensionar el sistema</p>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-xl">
+          <p class="text-sm text-gray-500 mb-1">Costo actual por kWh</p>
+          <div class="text-2xl font-bold">~<span id="lblCostoKwh">$0.00</span></div>
+          <p class="text-xs text-gray-500 mt-1">Tarifa aproximada</p>
+        </div>
+      </div>
+
+      <div class="bg-[#f0f9e8] text-green-800 px-6 py-4 rounded-lg mb-8" id="bannerCobertura">
+        <span class="font-bold">El sistema cubre el 100% del consumo.</span> Se acreditarán excedentes.
+      </div>
+
+      <!-- Gráfica de barras simple con CSS -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 mb-8">
+        <div class="h-48 flex items-end justify-around gap-2 pb-6 border-b border-gray-200 relative pt-8" id="chartBars">
+          <!-- Las barras se generan por JS -->
+          <div id="chartTargetLine" class="absolute w-full h-[2px] border-t-2 border-dashed border-green-500 z-10 hidden"></div>
+        </div>
+        <div class="flex justify-around text-xs text-gray-500 mt-2" id="chartLabels">
+          <span>P6</span><span>P5</span><span>P4</span><span>P3</span><span>P2</span><span>P1 (actual)</span>
+        </div>
+      </div>
+
+      <div class="section-title">RESULTADO DEL SISTEMA</div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div class="bg-orange-50 p-5 rounded-xl border border-orange-100">
+          <p class="text-xs text-gray-500 mb-1">Paneles recomendados</p>
+          <div class="text-2xl font-bold text-gray-900" id="resPaneles">4</div>
+          <p class="text-xs text-gray-500 mt-1" id="resKwp">620W c/u = 2.48 kWp</p>
+        </div>
+        <div class="bg-orange-50 p-5 rounded-xl border border-orange-100">
+          <p class="text-xs text-gray-500 mb-1">Generación bimestral</p>
+          <div class="text-2xl font-bold text-gray-900"><span id="resGeneracion">0</span> kWh</div>
+          <p class="text-xs text-gray-500 mt-1">Estimada</p>
+        </div>
+        <div class="bg-orange-50 p-5 rounded-xl border border-orange-100">
+          <p class="text-xs text-gray-500 mb-1">Ahorro estimado anual</p>
+          <div class="text-2xl font-bold text-gray-900" id="resAhorroAnual">$0.00</div>
+          <p class="text-xs text-gray-500 mt-1" id="resAhorroBimestral">$0.00 por bimestre</p>
+        </div>
+        <div class="bg-orange-50 p-5 rounded-xl border border-orange-100">
+          <p class="text-xs text-gray-500 mb-1">Inversión estimada</p>
+          <div class="text-2xl font-bold text-gray-900" id="resInversion">$0.00</div>
+          <p class="text-xs text-gray-500 mt-1">Con IVA incluido</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-orange-50 p-5 rounded-xl border border-orange-100">
+          <p class="text-xs text-gray-500 mb-1">Recuperación estimada</p>
+          <div class="text-2xl font-bold text-gray-900"><span id="resRecuperacion">0</span> años</div>
+          <p class="text-xs text-gray-500 mt-1">Retorno de inversión</p>
+        </div>
+        <div class="bg-orange-50 p-5 rounded-xl border border-orange-100">
+          <p class="text-xs text-gray-500 mb-1">Inversor sugerido</p>
+          <div class="text-2xl font-bold text-gray-900"><span id="resInversor">0</span> kW</div>
+          <p class="text-xs text-gray-500 mt-1">Interconexión a red</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 3: LISTA DE MATERIALES -->
+    <div id="panel-3" class="panel-content bg-white p-8 rounded-xl shadow-sm border border-slate-200">
+      <div class="section-title mt-0">LISTA DE MATERIALES RECOMENDADA</div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 text-gray-500">
+              <th class="py-3 font-medium">Cant.</th>
+              <th class="py-3 font-medium">Componente</th>
+              <th class="py-3 font-medium">Especificación</th>
+              <th class="py-3 font-medium text-right">Precio unit.</th>
+              <th class="py-3 font-medium text-right">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody id="tablaMateriales" class="divide-y divide-gray-100 text-gray-700">
+            <!-- Rellenado por JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-6 flex justify-end gap-6 text-sm">
+        <div class="bg-gray-50 p-4 rounded-lg w-48 hidden">
+          <p class="text-gray-500 mb-1">Subtotal</p>
+          <p class="text-lg font-bold" id="matSubtotal">$0.00</p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg w-48 hidden">
+          <p class="text-gray-500 mb-1">IVA 16%</p>
+          <p class="text-lg font-bold" id="matIva">$0.00</p>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg w-64 border border-green-100">
+          <p class="text-green-800 font-medium mb-1">Total (IVA incluido en precios)</p>
+          <p class="text-2xl font-bold text-green-700" id="matTotal">$0.00</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 4: DIAGRAMA -->
+    <div id="panel-4" class="panel-content">
+      <!-- Hidden inputs requeridos por diagrama.js y datos.js -->
+      <div class="hidden">
+        <input type="number" id="inpPaneles" value="2" />
+        <input type="number" id="inpInversor" value="3.3" />
+        <select id="inpVoltaje"><option value="220" selected>220V</option></select>
+        <select id="inpConfig"><option value="paralelo" selected>Paralelo</option></select>
+        <input type="number" id="inpProtDC" value="40" />
+        <input type="number" id="inpProtAC" value="20" />
+        <input type="checkbox" id="chkTierra" checked />
+        <input type="checkbox" id="chkDPS" />
+        <select id="inpTema"><option value="light" selected>Light</option></select>
+        <input type="range" id="inpEscala" value="100" />
+      </div>
+
+      <div class="bg-[#f8fafc] border border-slate-200 rounded-xl overflow-hidden flex flex-col items-center p-4">
+        <div class="w-full flex justify-between mb-4">
+          <h3 class="font-bold text-gray-700">Diagrama Unifilar Interconexión</h3>
+          <div class="flex gap-2">
+            <button class="bg-white border border-gray-300 px-3 py-1 text-sm rounded shadow-sm hover:bg-gray-50" onclick="exportarPNG()">↓ Exportar PNG</button>
+          </div>
+        </div>
+        <div class="overflow-auto w-full flex justify-center bg-white border border-gray-100 p-4 rounded shadow-inner">
+          <canvas id="canvasDiagrama" width="1200" height="650" class="rounded max-w-full"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JAVASCRIPT DE TABS Y CALCULADORA -->
+  <script>
+    function switchTab(tabNum) {
+      if(document.getElementById('tab-' + tabNum)?.disabled) return;
+      document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+        if(idx + 1 === tabNum) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+      document.querySelectorAll('.panel-content').forEach((panel, idx) => {
+        if(idx + 1 === tabNum) panel.classList.add('active');
+        else panel.classList.remove('active');
+      });
+      
+      // Si se abre el tab de diagrama, redibujar para asegurar que tome valores
+      if(tabNum === 4 && typeof redibujar === 'function') {
+        redibujar();
+      }
+    }
+
+    function formaterDinero(num) {
+      return '$' + parseFloat(num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
+    function calcularSistema() {
+      // 1. Obtener consumos
+      const consumos = [
+        parseFloat(document.getElementById('p1').value) || 0,
+        parseFloat(document.getElementById('p2').value) || 0,
+        parseFloat(document.getElementById('p3').value) || 0,
+        parseFloat(document.getElementById('p4').value) || 0,
+        parseFloat(document.getElementById('p5').value) || 0,
+        parseFloat(document.getElementById('p6').value) || 0
+      ];
+      
+      const noCero = consumos.filter(c => c > 0);
+      if(noCero.length === 0) { alert('Por favor, ingresa al menos un periodo de consumo.'); return; }
+      
+      const promedio = consumos.reduce((a,b) => a + b, 0) / (noCero.length === 6 ? 6 : noCero.length);
+      const maximo = Math.max(...consumos);
+      
+      // Cálculo de tarifa real basado en el recibo
+      const impEnergia = parseFloat(document.getElementById('impEnergia').value) || 0;
+      const actualKwh = consumos[0] > 0 ? consumos[0] : promedio; // Tomar el más reciente, o promedio
+      const tarifaKwhReal = (actualKwh > 0 && impEnergia > 0) ? (impEnergia / actualKwh) : 1.16; 
+      
+      // 2. Obtener parámetros y precios
+      const hsp = parseFloat(document.getElementById('inpHSP').value) || 5.5;
+      const wattsPanel = parseFloat(document.getElementById('inpWatts').value) || 620;
+      
+      const pPanel = parseFloat(document.getElementById('inpPrecioPanel').value) || 0;
+      const pInversor = parseFloat(document.getElementById('inpPrecioInversor').value) || 0;
+      const pMontaje = parseFloat(document.getElementById('inpPrecioMontaje').value) || 0;
+      const pRiel = parseFloat(document.getElementById('inpPrecioRiel').value) || 0;
+      const pMC4 = parseFloat(document.getElementById('inpPrecioMC4').value) || 0;
+      const pProtDC = parseFloat(document.getElementById('inpPrecioProtDC').value) || 0;
+      const pGabinete = parseFloat(document.getElementById('inpPrecioGabinete').value) || 0;
+      const pEnvio = parseFloat(document.getElementById('inpPrecioEnvio').value) || 0;
+      
+      // 3. Cálculos solares (LÓGICA ACTUALIZADA)
+      const consumoDiarioKwh = maximo / 60;
+      const genPanelDia = (wattsPanel / 1000) * hsp * 0.80; // 0.80 = factor de eficiencia real
+      
+      // Número de paneles necesarios (con margen 15% extra)
+      let numPaneles = Math.ceil((consumoDiarioKwh / genPanelDia) * 1.15);
+      if(numPaneles <= 0) numPaneles = 1;
+      
+      const kwpInstalado = (numPaneles * wattsPanel) / 1000;
+      const generacionBimestralReducida = genPanelDia * numPaneles * 60; // Ya incluye pérdidas por factor 0.80
+      
+      // Asignar tamaño de inversor (1.1x de los kWp, redondeado a 0.5 más cercano)
+      let calcInv = (numPaneles * wattsPanel * 1.1) / 1000;
+      let invSize = Math.round(calcInv * 2) / 2; // Redondear a intervalos de 0.5kW
+      if (invSize < 1) invSize = 1; // Mínimo 1 kW
+      
+      let modeloInversor = "MIC3300TLX2";
+      if (invSize > 3.3 && invSize <= 5.0) modeloInversor = "MIC5000TLX2";
+      else if (invSize > 5.0 && invSize <= 6.0) modeloInversor = "MIC6000TLX2";
+      else if (invSize > 6.0) modeloInversor = "MIN10000TL-X";
+      
+      // 4. Actualizar IU - TAB 2 (Análisis)
+      document.getElementById('lblPromedio').innerText = Math.round(promedio);
+      document.getElementById('lblMaximo').innerText = Math.round(maximo);
+      document.getElementById('lblCostoKwh').innerText = formaterDinero(tarifaKwhReal);
+      
+      document.getElementById('resPaneles').innerText = numPaneles;
+      document.getElementById('resKwp').innerText = `${wattsPanel}W c/u = ${kwpInstalado.toFixed(2)} kWp`;
+      document.getElementById('resGeneracion').innerText = Math.round(generacionBimestralReducida);
+      
+      // CÁLCULO DE AHORRO REAL
+      const ahorroBimestral = Math.min(generacionBimestralReducida, promedio) * tarifaKwhReal;
+      const ahorroAnual = ahorroBimestral * 6;
+      document.getElementById('resAhorroAnual').innerText = formaterDinero(ahorroAnual);
+      document.getElementById('resAhorroBimestral').innerText = formaterDinero(ahorroBimestral) + ' por bimestre';
+      document.getElementById('resInversor').innerText = invSize.toFixed(1);
+      
+      // 5. Lista de Materiales (Cantidades Derivadas)
+      const numKitsMontaje = Math.ceil(numPaneles / 4);
+      const numRieles = numKitsMontaje * 4;
+
+      const mat = [
+        { cant: numPaneles, nombre: `Panel solar monocristalino`, esp: `${wattsPanel}W`, precio: pPanel },
+        { cant: 1, nombre: `Inversor de cadena`, esp: `Modelo: ${modeloInversor}`, precio: pInversor },
+        { cant: numKitsMontaje, nombre: `Kit montaje piso/techo plano`, esp: `Arreglo 1x4`, precio: pMontaje },
+        { cant: numRieles, nombre: `Riel aluminio`, esp: `2700mm`, precio: pRiel },
+        { cant: numPaneles * 2, nombre: `Conector MC4`, esp: `Solar`, precio: pMC4 },
+        { cant: 1, nombre: `Protección térmica DC`, esp: `FPV632PC40`, precio: pProtDC },
+        { cant: 1, nombre: `Gabinete plástico`, esp: `F56CB4N`, precio: pGabinete },
+        { cant: 1, nombre: `Envío y flete`, esp: `Terrestre`, precio: pEnvio },
+      ];
+      
+      let totalMateriales = 0;
+      let htmlTabla = '';
+      mat.forEach(item => {
+        const itemLine = item.cant * item.precio;
+        totalMateriales += itemLine;
+        htmlTabla += `<tr class="border-b border-gray-100">
+          <td class="py-3">${item.cant}</td>
+          <td class="py-3">${item.nombre}</td>
+          <td class="py-3 text-sm text-gray-500">${item.esp}</td>
+          <td class="py-3 text-right">${formaterDinero(item.precio)}</td>
+          <td class="py-3 text-right font-medium">${formaterDinero(itemLine)}</td>
+        </tr>`;
+      });
+      document.getElementById('tablaMateriales').innerHTML = htmlTabla;
+      
+      // No agregar IVA adicional (los precios ya lo incluyen)
+      document.getElementById('matTotal').innerText = formaterDinero(totalMateriales);
+      document.getElementById('resInversion').innerText = formaterDinero(totalMateriales);
+      
+      // Recuperación real
+      const retornoAños = ahorroAnual > 0 ? (totalMateriales / ahorroAnual) : 0;
+      document.getElementById('resRecuperacion').innerText = retornoAños.toFixed(1);
+
+      // Gráfica de barras
+      const chartBars = document.getElementById('chartBars');
+      chartBars.innerHTML = '';
+      const maxGraph = Math.max(maximo, generacionBimestralReducida, 1);
+      [consumos[5], consumos[4], consumos[3], consumos[2], consumos[1], consumos[0]].forEach(c => {
+         const hPercent = (c / maxGraph) * 100;
+         chartBars.innerHTML += `<div style="height: ${hPercent}%; width: 14%; background-color: #3b82f6; border-radius: 4px 4px 0 0;" title="${c} kWh"></div>`;
+      });
+      // Línea de generación
+      const generacionPercent = (generacionBimestralReducida / maxGraph) * 100;
+      chartBars.innerHTML += `<div class="absolute w-full border-t-2 border-dashed border-green-500 z-10" style="bottom: ${generacionPercent}%;"></div>`;
+
+      // Pasar valores a los inputs ocultos del diagrama
+      document.getElementById('inpPaneles').value = numPaneles;
+      document.getElementById('inpInversor').value = invSize;
+
+      // Habilitar pestañas
+      document.getElementById('tab-2').disabled = false;
+      document.getElementById('tab-3').disabled = false;
+      document.getElementById('tab-4').disabled = false;
+      
+      // Mover a la pestaña 2 automáticamente
+      switchTab(2);
+    }
+  </script>
+
+  <!-- Lógica original de dibujo del diagrama (se ejecuta al abrir pestaña 4) -->
+  <script src="datos.js"></script>
+  <script src="componentes.js"></script>
+  <script src="diagrama.js"></script>
+
+</body>
+</html>
