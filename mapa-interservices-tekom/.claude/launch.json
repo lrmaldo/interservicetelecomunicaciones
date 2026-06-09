@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mapa-tekom",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "3456", "-d", "C:\\Users\\hipmi\\Documents\\mapa-interservices-tekom"],
+      "port": 3456
+    }
+  ]
+}

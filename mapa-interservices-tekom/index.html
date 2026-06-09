@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTTH Tekom — Red GPON | Interservices</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; overflow: hidden; height: 100vh; }
+        #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; }
+
+        /* Panel lateral */
+        .panel {
+            position: absolute; top: 0; left: 0; bottom: 0; width: 370px;
+            background: #111827; color: #e5e7eb; z-index: 1000;
+            display: flex; flex-direction: column; overflow-y: auto;
+            border-right: 1px solid rgba(139,92,246,0.3);
+            box-shadow: 4px 0 30px rgba(0,0,0,0.5);
+        }
+
+        .panel-header {
+            padding: 24px 20px 16px;
+            background: linear-gradient(135deg, #0a0f1e 0%, #1a1040 100%);
+            border-bottom: 1px solid rgba(139,92,246,0.2);
+        }
+        .panel-header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 18px; color: #a78bfa; margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+        .panel-header .subtitle {
+            font-size: 12px; color: #9ca3af;
+            font-family: 'Space Mono', monospace;
+        }
+        .panel-header .badge {
+            display: inline-block; margin-top: 8px;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 10px; font-weight: 700;
+            background: rgba(139,92,246,0.2); color: #a78bfa;
+            border: 1px solid rgba(139,92,246,0.3);
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 1px;
+        }
+
+        .section { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .section-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px; color: #6b7280; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 12px;
+        }
+
+        /* Stats grid */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-card {
+            background: rgba(255,255,255,0.03); border-radius: 10px;
+            padding: 12px; border: 1px solid rgba(255,255,255,0.06);
+        }
+        .stat-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 20px; font-weight: 700; color: #f9fafb;
+        }
+        .stat-label { font-size: 11px; color: #6b7280; margin-top: 2px; }
+
+        /* Layer toggles */
+        .layer-toggle {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 0; cursor: pointer; user-select: none;
+            transition: opacity 0.2s;
+        }
+        .layer-toggle:hover { opacity: 0.8; }
+        .layer-dot {
+            width: 14px; height: 14px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0;
+        }
+        .layer-dot.active { border-color: transparent; }
+        .layer-info { flex: 1; }
+        .layer-name { font-size: 13px; font-weight: 500; color: #e5e7eb; }
+        .layer-count { font-size: 11px; color: #6b7280; font-family: 'Space Mono', monospace; }
+        .layer-check {
+            width: 20px; height: 20px; border-radius: 6px;
+            border: 2px solid rgba(255,255,255,0.15); display: flex;
+            align-items: center; justify-content: center; flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .layer-check.active {
+            background: rgba(139,92,246,0.3); border-color: #8b5cf6;
+        }
+        .layer-check.active::after {
+            content: '✓'; font-size: 12px; color: #a78bfa;
+        }
+
+        /* Specs */
+        .spec-row {
+            display: flex; justify-content: space-between;
+            padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .spec-row:last-child { border-bottom: none; }
+        .spec-label { font-size: 12px; color: #9ca3af; }
+        .spec-value {
+            font-size: 12px; color: #e5e7eb; font-weight: 500;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Progress bars */
+        .progress-section { margin-top: 8px; }
+        .progress-item { margin-bottom: 12px; }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .progress-label { font-size: 11px; color: #9ca3af; }
+        .progress-pct { font-size: 11px; color: #a78bfa; font-family: 'Space Mono', monospace; }
+        .progress-bar {
+            height: 6px; background: rgba(255,255,255,0.06);
+            border-radius: 3px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; border-radius: 3px;
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+            transition: width 0.6s ease;
+        }
+
+        /* Footer */
+        .panel-footer {
+            padding: 16px 20px;
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            margin-top: auto;
+        }
+        .panel-footer p {
+            font-size: 10px; color: #4b5563;
+            font-family: 'Space Mono', monospace;
+            text-align: center; line-height: 1.6;
+        }
+
+        /* Custom popup */
+        .leaflet-popup-content-wrapper {
+            background: #1e1b4b !important;
+            color: #e5e7eb !important;
+            border-radius: 12px !important;
+            border: 1px solid rgba(139,92,246,0.3) !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+        }
+        .leaflet-popup-tip { background: #1e1b4b !important; }
+        .leaflet-popup-content {
+            font-family: 'DM Sans', sans-serif !important;
+            font-size: 13px !important; margin: 12px 16px !important;
+        }
+        .popup-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px; font-weight: 700; margin-bottom: 6px;
+        }
+        .popup-detail { color: #9ca3af; font-size: 12px; line-height: 1.6; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .panel { width: 100%; height: 40vh; top: auto; bottom: 0; border-right: none; border-top: 1px solid rgba(139,92,246,0.3); }
+            #map { bottom: 40vh; }
+        }
+
+        /* Legend on map */
+        .map-legend {
+            background: rgba(17,24,39,0.92); backdrop-filter: blur(10px);
+            border-radius: 10px; padding: 12px 16px;
+            border: 1px solid rgba(139,92,246,0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            font-family: 'DM Sans', sans-serif;
+        }
+        .legend-item { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+        .legend-line { width: 24px; height: 4px; border-radius: 2px; }
+        .legend-circle { width: 12px; height: 12px; border-radius: 50%; }
+        .legend-label { font-size: 11px; color: #d1d5db; }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <div class="panel-header">
+            <h1>FTTH TEKOM</h1>
+            <div class="subtitle">Red GPON — Chichimilá → Tekom</div>
+            <span class="badge">INTERSERVICES</span>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Resumen de Red</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" style="color:#d946ef">1</div>
+                    <div class="stat-label">Backbone</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="color:#22d3ee">23</div>
+                    <div class="stat-label">Distribución</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="color:#22c55e">53</div>
+                    <div class="stat-label">Cajas NAP</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="color:#f59e0b">194</div>
+                    <div class="stat-label">Postes</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Capas</div>
+            <div class="layer-toggle" onclick="toggleLayer('backbone')">
+                <div class="layer-dot active" style="background:#d946ef"></div>
+                <div class="layer-info">
+                    <div class="layer-name">Backbone</div>
+                    <div class="layer-count">1 tramo · 60 pts</div>
+                </div>
+                <div class="layer-check active" id="check-backbone"></div>
+            </div>
+            <div class="layer-toggle" onclick="toggleLayer('distribucion')">
+                <div class="layer-dot active" style="background:#22d3ee"></div>
+                <div class="layer-info">
+                    <div class="layer-name">Distribución</div>
+                    <div class="layer-count">23 líneas</div>
+                </div>
+                <div class="layer-check active" id="check-distribucion"></div>
+            </div>
+            <div class="layer-toggle" onclick="toggleLayer('nap')">
+                <div class="layer-dot active" style="background:#22c55e"></div>
+                <div class="layer-info">
+                    <div class="layer-name">Cajas NAP</div>
+                    <div class="layer-count">53 cajas</div>
+                </div>
+                <div class="layer-check active" id="check-nap"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Especificaciones</div>
+            <div class="spec-row">
+                <span class="spec-label">Fibra total</span>
+                <span class="spec-value">11,082.64 m</span>
+            </div>
+            <div class="spec-row">
+                <span class="spec-label">Cable</span>
+                <span class="spec-value">Mini ADSS 12H</span>
+            </div>
+            <div class="spec-row">
+                <span class="spec-label">Splitter</span>
+                <span class="spec-value">1×8</span>
+            </div>
+            <div class="spec-row">
+                <span class="spec-label">Peso total</span>
+                <span class="spec-value">620.48 kg</span>
+            </div>
+            <div class="spec-row">
+                <span class="spec-label">Postes</span>
+                <span class="spec-value">194</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Progreso</div>
+            <div class="progress-section">
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Diseño de Red</span>
+                        <span class="progress-pct">100%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Tendido de Fibra</span>
+                        <span class="progress-pct">0%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Instalación NAPs</span>
+                        <span class="progress-pct">0%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-footer">
+            <p>INTERSERVICES TELECOMUNICACIONES<br>Proyecto FTTH Tekom, Yucatán<br>Junio 2026</p>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+    // ═══════════════════════════════════════════
+    //  DATOS DE LA RED — Exportados del editor
+    // ═══════════════════════════════════════════
+
+    const networkData = {
+        backbone: [
+            [[20.63191824033353,-88.21672260761262],[20.631923260695878,-88.21692645549774],[20.631988525391286,-88.21732878684999],[20.632058810416563,-88.21744680404663],[20.63266376232776,-88.21828097105028],[20.630961858285882,-88.21862429380418],[20.630660634349077,-88.21911782026292],[20.629992919163556,-88.22023898363115],[20.629335241944126,-88.22112411260606],[20.629091750038974,-88.22150498628618],[20.628597234352213,-88.22243571281435],[20.628318597902226,-88.22295337915422],[20.627736220972146,-88.22405040264131],[20.627756302972344,-88.22427570819855],[20.625007554557726,-88.22873890399933],[20.624108866227324,-88.23018193244936],[20.622278839232457,-88.23318868875505],[20.620757565481714,-88.23581457138063],[20.620363437625063,-88.2363483309746],[20.618892352666222,-88.23865771293642],[20.61803564378104,-88.24001855753914],[20.617621425545007,-88.24070252083793],[20.617245523976052,-88.24127018451692],[20.616796157567038,-88.24204802513124],[20.615785989343035,-88.24368258924014],[20.615326576808787,-88.24446042985446],[20.61433089479588,-88.2461115717888],[20.614069805566892,-88.24651390314104],[20.613389465185072,-88.24761360883714],[20.612744268731593,-88.24869185686114],[20.6117425769941,-88.25021266937256],[20.610645478486102,-88.25200170278552],[20.60923204244657,-88.25422257184984],[20.608288070754863,-88.25577557086946],[20.608192669035088,-88.25600355863573],[20.607680511413093,-88.25735539197923],[20.607542429406653,-88.25798839330675],[20.607331540282587,-88.25970232486726],[20.60725371207974,-88.26012879610063],[20.607178394426224,-88.26036751270296],[20.607103076735484,-88.260555267334],[20.606673765187363,-88.26126873493195],[20.606397599224724,-88.26159328222276],[20.605754883773855,-88.26212972402575],[20.6052025480175,-88.26255083084108],[20.604948975022484,-88.2627359032631],[20.604065232177827,-88.26337426900865],[20.603678593071802,-88.26364517211915],[20.60336978321111,-88.2638865709305],[20.602842545417452,-88.26421111822131],[20.602162154902494,-88.26440691947938],[20.601499336129635,-88.26449811458589],[20.600311778619936,-88.26460003852844],[20.59924221573469,-88.26467245817186],[20.597999404364415,-88.26479852199556],[20.59673900753608,-88.26492190361023],[20.595400766032505,-88.26502919197084],[20.592514245397904,-88.26525986194612],[20.592514245397904,-88.26525449752808],[20.592514245397904,-88.26525449752808]]
+        ],
+        distribucion: [
+            [[20.60715179653436,-88.26054803901084],[20.60773425218725,-88.2619642453707],[20.60893932577968,-88.2614063458956],[20.60893932577968,-88.2614063458956],[20.60897949473528,-88.2614063458956],[20.608949368019573,-88.2614063458956],[20.608949368019573,-88.2614063458956]],
+            [[20.60770412522533,-88.2619642453707],[20.608095775265728,-88.26290838294393],[20.608095775265728,-88.26290838294393],[20.608095775265728,-88.26290838294393],[20.608095775265728,-88.26290838294393]],
+            [[20.607057510816833,-88.260415711229],[20.60606331351269,-88.25984708291786],[20.605179577130244,-88.2615315101792],[20.605179577130244,-88.2615315101792],[20.605179577130244,-88.2615315101792],[20.605179577130244,-88.2615315101792]],
+            [[20.605008854738433,-88.26275459748999],[20.605259917013147,-88.26443902475134],[20.607007298987305,-88.26457849962011],[20.6068667057766,-88.26384893876806],[20.60662568854218,-88.26336614114538],[20.606505179782012,-88.26294771653906],[20.606505179782012,-88.26294771653906]],
+            [[20.60526019848122,-88.26444445009653],[20.605355508214366,-88.26622541657338],[20.605496102819338,-88.26727684250721],[20.605486060351843,-88.26741631737599],[20.60569695203002,-88.26758797875294],[20.60681668152766,-88.26725002041707],[20.60681668152766,-88.26725002041707],[20.60681668152766,-88.26725002041707],[20.60681668152766,-88.26725002041707]],
+            [[20.60569704585244,-88.26758263464396],[20.604421648868872,-88.26784280891839],[20.604404074426444,-88.26832560654108],[20.60446181901541,-88.26978472824518],[20.604446755211693,-88.27002344484751],[20.60445428711373,-88.27009050007287],[20.606249379816465,-88.27011195774499],[20.60693235649864,-88.27011734247209],[20.606937377684805,-88.2701200246811],[20.606937377684805,-88.2701200246811]],
+            [[20.603914593681722,-88.26344400644304],[20.603839274377833,-88.26251059770586],[20.603809146645848,-88.26171934604646],[20.603781529552982,-88.26167911291124],[20.602609053811832,-88.26173812150957],[20.602609053811832,-88.26173812150957]],
+            [[20.603844295665915,-88.26265275478363],[20.603475230550956,-88.26272785663606],[20.602787310876376,-88.26284050941467],[20.602787310876376,-88.26284050941467]],
+            [[20.603917104324545,-88.26344937086107],[20.60392463625276,-88.26347619295122],[20.60392463625276,-88.26347619295122]],
+            [[20.603891997894472,-88.2636344432831],[20.603891997894472,-88.26363712549211],[20.603891997894472,-88.26363712549211]],
+            [[20.603914593681722,-88.26348960399629],[20.604032593849638,-88.26460003852844],[20.60411795561629,-88.26572656631471],[20.604492040441507,-88.26614230871202],[20.604697912235487,-88.26641589403154],[20.604697912235487,-88.26641589403154]],
+            [[20.60431629600711,-88.26595991849902],[20.604203317335116,-88.26601892709733],[20.604105402418295,-88.26572656631471],[20.60344008144578,-88.26503723859788],[20.602789821537772,-88.26524645090105],[20.602722033665668,-88.26525181531908],[20.60249607387425,-88.26611548662187],[20.602478499209756,-88.26619595289232],[20.602470967210074,-88.26734662055969],[20.602453392542706,-88.26806008815767],[20.60248603120908,-88.26824247837067],[20.602593989824992,-88.26871186494829],[20.60259650048958,-88.26897740364076],[20.602601521818602,-88.26963454484942],[20.602601521818602,-88.26963454484942]],
+            [[20.601579677952596,-88.26449543237688],[20.60165248769306,-88.26505064964296],[20.601850831292396,-88.26619595289232],[20.601484272033115,-88.26670289039612],[20.600625616070598,-88.26669484376909],[20.600389610367948,-88.26672971248628],[20.600645701645437,-88.26838195323946],[20.601554571137463,-88.26819956302643],[20.601554571137463,-88.26819956302643]],
+            [[20.600389610367948,-88.26671361923218],[20.60041471737496,-88.26613426208498],[20.600389610367948,-88.265238404274],[20.600389610367948,-88.265238404274],[20.600389610367948,-88.265238404274],[20.600389610367948,-88.265238404274]],
+            [[20.598581894999644,-88.26477706432281],[20.59865219544252,-88.26574802398622],[20.598596959382984,-88.2661610841745],[20.598275585548706,-88.26679944992006],[20.59819022051009,-88.26693892478882],[20.59775335162304,-88.26691210269867],[20.59754747044916,-88.26693892478882],[20.597592663901402,-88.26728224754274],[20.596653641641247,-88.2681030035013],[20.595820066228757,-88.26879501342773],[20.595619204003178,-88.2680869102478],[20.595584053086498,-88.26766848564148],[20.59556898840543,-88.26757192611696],[20.59556898840543,-88.26757192611696]],
+            [[20.597693093743114,-88.26487362384798],[20.59769811523367,-88.26501846313478],[20.596422651317745,-88.26531887054443],[20.595503708103653,-88.26557099819185],[20.593545286053605,-88.26612889766693]],
+            [[20.59541834151299,-88.26561391353609],[20.595443449338728,-88.26636493206026],[20.595443449338728,-88.26636493206026]],
+            [[20.596643598586994,-88.26808154582979],[20.596553211106453,-88.26718032360077],[20.596553211106453,-88.26718032360077],[20.596553211106453,-88.26718032360077],[20.596553211106453,-88.26718032360077]],
+            [[20.596392522119867,-88.26535105705263],[20.596457802041087,-88.26591968536377],[20.596457802041087,-88.26591968536377]],
+            [[20.597386782506344,-88.26510965824127],[20.597452062001853,-88.26551198959352],[20.597477169492677,-88.26580166816713],[20.597477169492677,-88.26580166816713]],
+            [[20.601579677952596,-88.26447129249574],[20.60143907973463,-88.2632052898407],[20.601418994264332,-88.26266348361969],[20.601338652356677,-88.26218605041505],[20.601263331779812,-88.26167643070222],[20.600967070482948,-88.2610058784485],[20.60092187803112,-88.26091468334198],[20.60197636508266,-88.26060354709625],[20.60197636508266,-88.26060354709625],[20.601981386432115,-88.26059818267824],[20.601981386432115,-88.26059818267824]],
+            [[20.60129346001501,-88.261815905571],[20.60015862570941,-88.26184809207918],[20.60002304759464,-88.26132774353029],[20.599656483939835,-88.26037287712097],[20.599656483939835,-88.26037287712097]],
+            [[20.60015862570941,-88.26186418533327],[20.600203818387538,-88.26250791549683],[20.600264075270857,-88.2631677389145],[20.60030926791773,-88.26406359672548],[20.60030926791773,-88.26406359672548]]
+        ],
+        nap: [
+            {id:"NAP-01",lat:20.60411795561629,lng:-88.26567292213441},
+            {id:"NAP-02",lat:20.602606543147473,lng:-88.26963454484942},
+            {id:"NAP-03",lat:20.602475988543233,lng:-88.26743781566621},
+            {id:"NAP-04",lat:20.60040467457266,lng:-88.26676189899446},
+            {id:"NAP-05",lat:20.600399653171245,lng:-88.26525449752808},
+            {id:"NAP-06",lat:20.598536701840665,lng:-88.2647556066507},
+            {id:"NAP-07",lat:20.59767551852486,lng:-88.26481461524965},
+            {id:"NAP-08",lat:20.593218879933115,lng:-88.26627373695374},
+            {id:"NAP-10",lat:20.595267694471687,lng:-88.26565146446228},
+            {id:"NAP-11",lat:20.595443449338728,lng:-88.2664078474045},
+            {id:"NAP-12",lat:20.59556898840543,lng:-88.2675611972809},
+            {id:"NAP-13",lat:20.595810023123754,lng:-88.26880037784578},
+            {id:"NAP-14",lat:20.596553211106453,lng:-88.2671642303467},
+            {id:"NAP-15",lat:20.596447758978105,lng:-88.26591968536377},
+            {id:"NAP-16",lat:20.59748721248785,lng:-88.26581239700319},
+            {id:"NAP-17",lat:20.60197636508266,lng:-88.26058745384218},
+            {id:"NAP-18",lat:20.60135873783756,lng:-88.26220750808717},
+            {id:"NAP-19",lat:20.599671548216996,lng:-88.26036751270296},
+            {id:"NAP-20",lat:20.600324332130377,lng:-88.26405823230743},
+            {id:"NAP-21",lat:20.59768305076149,lng:-88.26692819595338},
+            {id:"NAP-22",lat:20.598579384264767,lng:-88.26621472835542},
+            {id:"NAP-23",lat:20.597040298562284,lng:-88.26778650283815},
+            {id:"NAP-24",lat:20.60186589535268,lng:-88.26620399951936},
+            {id:"NAP-25",lat:20.601539507046414,lng:-88.26822638511659},
+            {id:"NAP-26",lat:20.602593989824992,lng:-88.26173543930054},
+            {id:"NAP-27",lat:20.602789821537772,lng:-88.26285660266878},
+            {id:"NAP-28",lat:20.603849316953834,lng:-88.26218605041505},
+            {id:"NAP-29",lat:20.60342250689015,lng:-88.26502382755281},
+            {id:"NAP-30",lat:20.60266428841751,lng:-88.2655656337738},
+            {id:"NAP-31",lat:20.604612550793686,lng:-88.2678133249283},
+            {id:"NAP-32",lat:20.60446191283859,lng:-88.2699751853943},
+            {id:"NAP-33",lat:20.60572224580755,lng:-88.26757192611696},
+            {id:"NAP-34",lat:20.606942398870803,lng:-88.27009856700899},
+            {id:"NAP-35",lat:20.606821890361097,lng:-88.26726615428926},
+            {id:"NAP-36",lat:20.6065206186699,lng:-88.26296389102936},
+            {id:"NAP-37",lat:20.606691339368044,lng:-88.26453566551208},
+            {id:"NAP-38",lat:20.606535682268614,lng:-88.26013684272768},
+            {id:"NAP-39",lat:20.605807606627742,lng:-88.26036751270296},
+            {id:"NAP-40",lat:20.605195016152432,lng:-88.26152086257936},
+            {id:"NAP-41",lat:20.607143246175177,lng:-88.260555267334},
+            {id:"NAP-42",lat:20.60771565954021,lng:-88.2619607448578},
+            {id:"NAP-43",lat:20.60810730955097,lng:-88.26292097568513},
+            {id:"NAP-44",lat:20.6082830496132,lng:-88.26173543930054},
+            {id:"NAP-45",lat:20.608965923359495,lng:-88.26142430305481},
+            {id:"NAP-46",lat:20.60523518609511,lng:-88.26421916484834},
+            {id:"NAP-47",lat:20.605044378773083,lng:-88.26268494129181},
+            {id:"NAP-48",lat:20.60538080204857,lng:-88.26623618602754},
+            {id:"NAP-49",lat:20.604697912235487,lng:-88.26643466949464},
+            {id:"NAP-50",lat:20.60393970010808,lng:-88.26347887516023},
+            {id:"NAP-51",lat:20.601735340114047,lng:-88.26447665691377},
+            {id:"NAP-52",lat:20.59265645676036,lng:-88.26529741231182},
+            {id:"NAP-53",lat:20.594434111816106,lng:-88.26508820042905}
+        ]
+    };
+
+    // ═══════════════════════════════════════════
+    //  COLORES
+    // ═══════════════════════════════════════════
+    const COLORS = {
+        backbone: '#d946ef',      // Magenta/Fuchsia — muy visible sobre carretera
+        distribucion: '#22d3ee',   // Cyan
+        nap: '#22c55e'             // Verde
+    };
+
+    // ═══════════════════════════════════════════
+    //  MAPA
+    // ═══════════════════════════════════════════
+    const map = L.map('map', {
+        center: [20.6020, -88.2640],
+        zoom: 15,
+        zoomControl: false
+    });
+
+    L.control.zoom({ position: 'topright' }).addTo(map);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+    }).addTo(map);
+
+    // ═══════════════════════════════════════════
+    //  LAYER GROUPS
+    // ═══════════════════════════════════════════
+    const layers = {
+        backbone: L.layerGroup(),
+        distribucion: L.layerGroup(),
+        nap: L.layerGroup()
+    };
+
+    // --- Backbone ---
+    networkData.backbone.forEach((coords, i) => {
+        // Glow effect (behind)
+        const glow = L.polyline(coords, {
+            color: COLORS.backbone,
+            weight: 14,
+            opacity: 0.15,
+            lineJoin: 'round',
+            lineCap: 'round'
+        });
+        layers.backbone.addLayer(glow);
+
+        // Main line
+        const line = L.polyline(coords, {
+            color: COLORS.backbone,
+            weight: 5,
+            opacity: 0.95,
+            lineJoin: 'round',
+            lineCap: 'round'
+        });
+        line.bindPopup(`
+            <div class="popup-title" style="color:${COLORS.backbone}">&#128279; Backbone</div>
+            <div class="popup-detail">
+                Tramo ${i + 1}<br>
+                Puntos: ${coords.length}<br>
+                Chichimilá → Tekom<br>
+                Cable: Mini ADSS 12H
+            </div>
+        `);
+        layers.backbone.addLayer(line);
+    });
+
+    // --- Distribución ---
+    networkData.distribucion.forEach((coords, i) => {
+        const line = L.polyline(coords, {
+            color: COLORS.distribucion,
+            weight: 3,
+            opacity: 0.85,
+            dashArray: '8, 4',
+            lineJoin: 'round',
+            lineCap: 'round'
+        });
+        line.bindPopup(`
+            <div class="popup-title" style="color:${COLORS.distribucion}">&#128225; Distribución</div>
+            <div class="popup-detail">
+                Línea ${i + 1} de 23<br>
+                Puntos: ${coords.length}<br>
+                Splitter: 1×8
+            </div>
+        `);
+        layers.distribucion.addLayer(line);
+    });
+
+    // --- NAP Boxes ---
+    const napIcon = L.divIcon({
+        className: 'nap-marker',
+        html: '<div style="width:22px;height:22px;border-radius:5px;background:' + COLORS.nap + ';border:2px solid #fff;box-shadow:0 2px 8px rgba(34,197,94,0.5);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;font-family:Space Mono,monospace;">N</div>',
+        iconSize: [22, 22],
+        iconAnchor: [11, 11]
+    });
+
+    networkData.nap.forEach(nap => {
+        const marker = L.marker([nap.lat, nap.lng], { icon: napIcon });
+        marker.bindPopup(`
+            <div class="popup-title" style="color:${COLORS.nap}">&#128230; ${nap.id}</div>
+            <div class="popup-detail">
+                Caja de distribución<br>
+                Lat: ${nap.lat.toFixed(6)}<br>
+                Lng: ${nap.lng.toFixed(6)}<br>
+                Splitter: 1×8
+            </div>
+        `);
+        layers.nap.addLayer(marker);
+    });
+
+    // Add all layers to map
+    Object.values(layers).forEach(layer => layer.addTo(map));
+
+    // ═══════════════════════════════════════════
+    //  START / END MARKERS
+    // ═══════════════════════════════════════════
+    const startIcon = L.divIcon({
+        className: 'start-marker',
+        html: '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#6d28d9);border:3px solid #fff;box-shadow:0 4px 16px rgba(139,92,246,0.5);display:flex;align-items:center;justify-content:center;font-size:16px;">&#127937;</div>',
+        iconSize: [36, 36],
+        iconAnchor: [18, 18]
+    });
+
+    const endIcon = L.divIcon({
+        className: 'end-marker',
+        html: '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#d946ef,#a21caf);border:3px solid #fff;box-shadow:0 4px 16px rgba(217,70,239,0.5);display:flex;align-items:center;justify-content:center;font-size:16px;">&#128205;</div>',
+        iconSize: [36, 36],
+        iconAnchor: [18, 18]
+    });
+
+    // Backbone start (Chichimilá)
+    L.marker([20.63191824033353, -88.21672260761262], { icon: startIcon })
+        .bindPopup(`
+            <div class="popup-title" style="color:#8b5cf6">&#127937; Inicio — Chichimilá</div>
+            <div class="popup-detail">
+                Punto de origen del backbone<br>
+                Lat: 20.631918<br>
+                Lng: -88.216723
+            </div>
+        `).addTo(map);
+
+    // Backbone end (South Tekom)
+    L.marker([20.592514245397904, -88.26525449752808], { icon: endIcon })
+        .bindPopup(`
+            <div class="popup-title" style="color:#d946ef">&#128205; Fin — Sur de Tekom</div>
+            <div class="popup-detail">
+                Punto final del backbone<br>
+                Lat: 20.592514<br>
+                Lng: -88.265254
+            </div>
+        `).addTo(map);
+
+    // ═══════════════════════════════════════════
+    //  LEGEND CONTROL
+    // ═══════════════════════════════════════════
+    const legend = L.control({ position: 'bottomright' });
+    legend.onAdd = function() {
+        const div = L.DomUtil.create('div', 'map-legend');
+        div.innerHTML = `
+            <div class="legend-item">
+                <div class="legend-line" style="background:${COLORS.backbone}"></div>
+                <span class="legend-label">Backbone</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line" style="background:${COLORS.distribucion}; border-style:dashed"></div>
+                <span class="legend-label">Distribución</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-circle" style="background:${COLORS.nap}; border:2px solid #fff"></div>
+                <span class="legend-label">Caja NAP</span>
+            </div>
+        `;
+        return div;
+    };
+    legend.addTo(map);
+
+    // ═══════════════════════════════════════════
+    //  TOGGLE LAYERS
+    // ═══════════════════════════════════════════
+    function toggleLayer(name) {
+        const layer = layers[name];
+        const check = document.getElementById('check-' + name);
+        if (map.hasLayer(layer)) {
+            map.removeLayer(layer);
+            check.classList.remove('active');
+        } else {
+            map.addLayer(layer);
+            check.classList.add('active');
+        }
+    }
+
+    // ═══════════════════════════════════════════
+    //  FIT BOUNDS to network
+    // ═══════════════════════════════════════════
+    const allPoints = [];
+    networkData.backbone.forEach(line => line.forEach(p => allPoints.push(p)));
+    networkData.distribucion.forEach(line => line.forEach(p => allPoints.push(p)));
+    networkData.nap.forEach(n => allPoints.push([n.lat, n.lng]));
+
+    if (allPoints.length > 0) {
+        const bounds = L.latLngBounds(allPoints);
+        map.fitBounds(bounds, { padding: [60, 60], maxZoom: 16 });
+    }
+
+    // Store map reference
+    window._map = map;
+    </script>
+</body>
+</html>
